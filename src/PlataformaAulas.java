@@ -149,7 +149,7 @@ add(btnOpen, BorderLayout.SOUTH);
             } else { 
                 extensions = new String[]{"mp4", "avi"}; 
             } 
-            File[] arquivos =pastaCategoria.listFiles((dir, name) -> { 
+            File[] arquivos = pastaCategoria.listFiles((dir, name) -> { 
                 for (String ext : extensions) { 
                     if (name.endsWith("." + ext)) return true; 
                 } 
