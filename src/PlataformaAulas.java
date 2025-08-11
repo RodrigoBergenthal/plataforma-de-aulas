@@ -21,7 +21,8 @@ import java.nio.file.Paths;
 import javax.swing.event.ListSelectionEvent; 
 import javax.swing.event.ListSelectionListener; 
 import javafx.embed.swing.JFXPanel; 
-import javafx.scene.Scene; 
+// Add JavaFX SDK to project classpath to resolve Scene import
+import javafx.scene.Scene;
 import javafx.scene.layout.StackPane; 
 import javafx.scene.media.Media; 
 import javafx.scene.media.MediaPlayer; 
