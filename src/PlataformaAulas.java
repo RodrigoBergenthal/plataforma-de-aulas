@@ -20,6 +20,14 @@ import java.nio.file.Files;
 import java.nio.file.Paths; 
 import javax.swing.event.ListSelectionEvent; 
 import javax.swing.event.ListSelectionListener; 
+import javafx.embed.swing.JFXPanel; 
+import javafx.scene.Scene; 
+import javafx.scene.layout.StackPane; 
+import javafx.scene.media.Media; 
+import javafx.scene.media.MediaPlayer; 
+import javafx.scene.media.MediaView; 
+import javafx.application.Platform; 
+import java.nio.file.StandardCopyOption; 
  
 public class PlataformaAulas extends JFrame { 
  
@@ -28,22 +36,41 @@ public class PlataformaAulas extends JFrame {
     private JButton btnOpen; 
     private JLabel lblTitulo; 
     private JList<String> listaCategorias; 
-    private String conteudoDir = "videos"; 
-    private String thumbnailsDir = "thumbnails"; 
+private String conteudoDir = "videos"; 
+private String thumbnailsDir = "thumbnails"; 
+private JMenuBar menuBar; 
  
     public PlataformaAulas() { 
         super("Plataforma de Aulas - Projeto de Estudo"); 
  
         // Configurações básicas da janela 
-        setSize(600, 400); 
-        setDefaultCloseOperation(EXIT_ON_CLOSE); 
-        setLocationRelativeTo(null); 
-        setLayout(new BorderLayout()); 
- 
-        // Título da aplicação 
-        lblTitulo = new JLabel("Selecione uma categoria e item para abrir", JLabel.CENTER); 
-        lblTitulo.setFont(new Font("Arial", Font.BOLD, 18)); 
-        add(lblTitulo, BorderLayout.NORTH); 
+setSize(800, 600); 
+setDefaultCloseOperation(EXIT_ON_CLOSE); 
+setLocationRelativeTo(null); 
+setLayout(new BorderLayout()); 
+
+// Menu para gerenciar categorias e itens 
+menuBar = new JMenuBar(); 
+JMenu menuGerenciar = new JMenu("Gerenciar"); 
+JMenuItem addCategoria = new JMenuItem("Adicionar Categoria"); 
+addCategoria.addActionListener(e -> adicionarCategoria()); 
+JMenuItem removeCategoria = new JMenuItem("Remover Categoria"); 
+removeCategoria.addActionListener(e -> removerCategoria()); 
+JMenuItem addItem = new JMenuItem("Adicionar Item"); 
+addItem.addActionListener(e -> adicionarItem()); 
+JMenuItem removeItem = new JMenuItem("Remover Item"); 
+removeItem.addActionListener(e -> removerItem()); 
+menuGerenciar.add(addCategoria); 
+menuGerenciar.add(removeCategoria); 
+menuGerenciar.add(addItem); 
+menuGerenciar.add(removeItem); 
+menuBar.add(menuGerenciar); 
+setJMenuBar(menuBar); 
+
+// Título da aplicação 
+lblTitulo = new JLabel("Selecione uma categoria e item para abrir", JLabel.CENTER); 
+lblTitulo.setFont(new Font("Arial", Font.BOLD, 18)); 
+add(lblTitulo, BorderLayout.NORTH); 
  
         // Lista de categorias 
         listaCategorias = new JList<>(); 
@@ -75,18 +102,22 @@ public class PlataformaAulas extends JFrame {
         } 
  
         // Botão de abertura 
-        btnOpen = new JButton("Abrir Item"); 
-        btnOpen.addActionListener(new ActionListener() { 
-            public void actionPerformed(ActionEvent e) { 
-                File itemSelecionado = listaItens.getSelectedValue(); 
-                if (itemSelecionado != null) { 
-                    abrirItem(itemSelecionado); 
-                } else { 
-                    JOptionPane.showMessageDialog(null, "Selecione um item da lista."); 
-                } 
+btnOpen = new JButton("Abrir Item"); 
+btnOpen.addActionListener(new ActionListener() { 
+    public void actionPerformed(ActionEvent e) { 
+        File itemSelecionado = listaItens.getSelectedValue(); 
+        if (itemSelecionado != null) { 
+            if (itemSelecionado.getName().endsWith(".pdf")) { 
+                abrirItem(itemSelecionado); 
+            } else { 
+                abrirVideoIntegrado(itemSelecionado); 
             } 
-        }); 
-        add(btnOpen, BorderLayout.SOUTH); 
+        } else { 
+            JOptionPane.showMessageDialog(null, "Selecione um item da lista."); 
+        } 
+    } 
+}); 
+add(btnOpen, BorderLayout.SOUTH); 
  
         // Criar pasta de thumbnails se não existir 
         new File(thumbnailsDir).mkdirs(); 
@@ -176,14 +207,102 @@ public class PlataformaAulas extends JFrame {
         } 
     } 
  
-    // Método para abrir item (vídeo ou PDF) 
-    private void abrirItem(File item) { 
+    // Método para abrir item externo (para PDFs) 
+private void abrirItem(File item) { 
+    try { 
+        Runtime.getRuntime().exec(new String[] {"cmd", "/c", "start", "", item.getAbsolutePath()}); 
+    } catch (IOException ex) { 
+        JOptionPane.showMessageDialog(null, "Erro ao abrir item: " + ex.getMessage()); 
+    } 
+} 
+
+// Método para abrir vídeo integrado com JavaFX 
+private void abrirVideoIntegrado(File video) { 
+    JDialog dialog = new JDialog(this, "Player de Vídeo", true); 
+    dialog.setSize(800, 600); 
+    dialog.setLocationRelativeTo(this); 
+    JFXPanel fxPanel = new JFXPanel(); 
+    dialog.add(fxPanel); 
+    Platform.runLater(() -> { 
         try { 
-            Runtime.getRuntime().exec(new String[] {"cmd", "/c", "start", "", item.getAbsolutePath()}); 
-        } catch (IOException ex) { 
-            JOptionPane.showMessageDialog(null, "Erro ao abrir item: " + ex.getMessage()); 
+            Media media = new Media(video.toURI().toString()); 
+            MediaPlayer mediaPlayer = new MediaPlayer(media); 
+            MediaView mediaView = new MediaView(mediaPlayer); 
+            StackPane root = new StackPane(); 
+            root.getChildren().add(mediaView); 
+            Scene scene = new Scene(root); 
+            fxPanel.setScene(scene); 
+            mediaPlayer.play(); 
+        } catch (Exception ex) { 
+            ex.printStackTrace(); 
+        } 
+    }); 
+    dialog.setVisible(true); 
+} 
+
+// Métodos para gerenciar categorias e itens 
+private void adicionarCategoria() { 
+    String nome = JOptionPane.showInputDialog(this, "Nome da nova categoria:"); 
+    if (nome != null && !nome.trim().isEmpty()) { 
+        File novaPasta = new File(conteudoDir + "/" + nome); 
+        if (novaPasta.mkdir()) { 
+            carregarCategorias(); 
+            JOptionPane.showMessageDialog(this, "Categoria adicionada."); 
+        } else { 
+            JOptionPane.showMessageDialog(this, "Erro ao adicionar categoria."); 
         } 
     } 
+} 
+
+private void removerCategoria() { 
+    String categoria = listaCategorias.getSelectedValue(); 
+    if (categoria != null) { 
+        File pasta = new File(conteudoDir + "/" + categoria); 
+        if (pasta.delete()) { 
+            carregarCategorias(); 
+            JOptionPane.showMessageDialog(this, "Categoria removida."); 
+        } else { 
+            JOptionPane.showMessageDialog(this, "Erro ao remover categoria (verifique se está vazia)."); 
+        } 
+    } else { 
+        JOptionPane.showMessageDialog(this, "Selecione uma categoria."); 
+    } 
+} 
+
+private void adicionarItem() { 
+    String categoria = listaCategorias.getSelectedValue(); 
+    if (categoria != null) { 
+        JFileChooser chooser = new JFileChooser(); 
+        if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) { 
+            File selectedFile = chooser.getSelectedFile(); 
+            File destino = new File(conteudoDir + "/" + categoria + "/" + selectedFile.getName()); 
+            try { 
+                Files.copy(selectedFile.toPath(), destino.toPath(), StandardCopyOption.REPLACE_EXISTING); 
+                carregarItensDaCategoria(categoria); 
+                JOptionPane.showMessageDialog(this, "Item adicionado."); 
+            } catch (IOException ex) { 
+                JOptionPane.showMessageDialog(this, "Erro ao adicionar item: " + ex.getMessage()); 
+            } 
+        } 
+    } else { 
+        JOptionPane.showMessageDialog(this, "Selecione uma categoria."); 
+    } 
+} 
+
+private void removerItem() { 
+    File item = listaItens.getSelectedValue(); 
+    if (item != null) { 
+        if (item.delete()) { 
+            String categoria = listaCategorias.getSelectedValue(); 
+            carregarItensDaCategoria(categoria); 
+            JOptionPane.showMessageDialog(this, "Item removido."); 
+        } else { 
+            JOptionPane.showMessageDialog(this, "Erro ao remover item."); 
+        } 
+    } else { 
+        JOptionPane.showMessageDialog(this, "Selecione um item."); 
+    } 
+} 
  
     public static void main(String[] args) { 
         SwingUtilities.invokeLater(() -> { 

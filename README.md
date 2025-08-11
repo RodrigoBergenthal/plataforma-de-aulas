@@ -1,32 +1,34 @@
 # Plataforma de Aulas
 
 ## Descrição
-Esta é uma aplicação desktop em Java usando Swing para gerenciar e abrir vídeos e PDFs organizados em categorias. Vídeos têm thumbnails gerados com FFmpeg, e PDFs usam ícones do sistema.
+Esta é uma aplicação desktop em Java usando Swing integrado com JavaFX para gerenciar categorias, itens, reproduzir vídeos internamente e abrir PDFs. Vídeos têm thumbnails gerados com FFmpeg, e PDFs usam ícones do sistema.
 
 ## Requisitos
-- Java JDK 8 ou superior instalado.
-- FFmpeg (incluído no diretório `tools/`, mas certifique-se de que está presente).
+- Java JDK 11 ou superior instalado (para suporte a módulos JavaFX).
+- FFmpeg (não incluído; baixe e coloque em `tools/`).
+- JavaFX SDK (baixe de https://gluonhq.com/products/javafx/ e extraia para `libs/`).
 
 ## Instalação de Dependências
 1. **Instale Java JDK**: Baixe e instale do site oficial da Oracle ou use OpenJDK. Adicione ao PATH se necessário.
-2. **FFmpeg**: O executável está em `tools/ffmpeg.exe`. Se não estiver, baixe do site oficial do FFmpeg e extraia `ffmpeg.exe` para `tools/`.
+2. **FFmpeg**: Baixe o executável do site oficial do FFmpeg (versão estática para Windows), extraia `ffmpeg.exe` e coloque em `tools/`.
 
 ## Como Rodar a Aplicação
 1. Navegue até o diretório do projeto: `cd caminho/para/plataforma de teste`.
-2. Compile o código: `javac src/PlataformaAulas.java`.
-3. Execute: `java -cp src PlataformaAulas`.
+2. Compile o código: `javac --module-path libs/javafx-sdk-21/lib --add-modules javafx.controls,javafx.media,javafx.swing -cp src src/PlataformaAulas.java`.
+3. Execute: `java --module-path libs/javafx-sdk-21/lib --add-modules javafx.controls,javafx.media,javafx.swing -cp src PlataformaAulas`.
 
-Ou em um comando só (PowerShell): `javac src/PlataformaAulas.java; if ($LASTEXITCODE -eq 0) { java -cp src PlataformaAulas }`.
+Ou em um comando só (PowerShell): `javac --module-path libs/javafx-sdk-21/lib --add-modules javafx.controls,javafx.media,javafx.swing -cp src src/PlataformaAulas.java; if ($LASTEXITCODE -eq 0) { java --module-path libs/javafx-sdk-21/lib --add-modules javafx.controls,javafx.media,javafx.swing -cp src PlataformaAulas }`.
 
 ## Estrutura de Pastas
 - `videos/`: Contém subpastas para categorias (ex: `VideoAula/` para vídeos, `conteudo/` para PDFs).
 - `thumbnails/`: Armazena thumbnails gerados para vídeos.
-- `tools/`: Contém `ffmpeg.exe`.
+- `tools/`: Onde colocar `ffmpeg.exe` (não incluído no repositório).
 
 ## Uso
+- Use o menu "Gerenciar" para adicionar/remover categorias e itens.
 - Selecione uma categoria na lista à esquerda.
 - Selecione um item na lista central.
-- Clique em "Abrir Item" para abrir o vídeo ou PDF.
+- Clique em "Abrir Item" para reproduzir vídeo internamente ou abrir PDF.
 
 ## Configuração do GitHub
 Após clonar ou baixar, para contribuir:
