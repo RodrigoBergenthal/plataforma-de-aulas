@@ -6,31 +6,57 @@
  *            O foco é educacional, com estrutura clara e código comentado para facilitar o aprendizado. 
  */ 
  
-import javax.swing.*; 
-import java.awt.*; 
-import java.awt.event.*; 
-import java.io.File; 
-import java.io.IOException; 
-import java.util.ArrayList; 
-import java.util.List; 
-import javax.swing.filechooser.FileSystemView; 
-import java.awt.image.BufferedImage; 
-import javax.imageio.ImageIO; 
-import java.nio.file.Files; 
-import java.nio.file.StandardCopyOption; 
-import javax.swing.event.ListSelectionEvent; 
-import javax.swing.event.ListSelectionListener; 
-import javafx.scene.Scene;
-import javafx.scene.layout.StackPane; 
-import javafx.scene.media.Media; 
-import javafx.scene.media.MediaPlayer; 
-import javafx.scene.media.MediaView; 
-import javafx.embed.swing.JFXPanel;
-import javafx.application.Platform;
-import java.util.Arrays;
-import java.nio.file.Paths;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Font;
+import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.imageio.ImageIO;
+
+import javax.swing.BorderFactory;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
+import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.filechooser.FileSystemView;
+
 import com.formdev.flatlaf.FlatLightLaf;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
+
+import javafx.application.Platform;
+import javafx.embed.swing.JFXPanel;
+// Add JavaFX SDK to project classpath and module path
+// Make sure to use the correct JavaFX version matching your Java version
+import javafx.scene.Scene;
+import javafx.scene.layout.StackPane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
  
 public class PlataformaAulas extends JFrame { 
  

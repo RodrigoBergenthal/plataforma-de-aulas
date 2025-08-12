@@ -6,7 +6,7 @@ Esta é uma aplicação desktop em Java usando Swing integrado com JavaFX para g
 ## Requisitos
 - Java JDK 11 ou superior instalado (para suporte a módulos JavaFX).
 - FFmpeg (não incluído; baixe e coloque em `tools/`).
-- JavaFX SDK (baixe de https://gluonhq.com/products/javafx/ e extraia para `libs/`).
+- JavaFX SDK (baixe de https://gluonhq.com/products/javafx/ e copie os arquivos JAR para a pasta `lib/` do projeto).
 
 ## Instalação de Dependências
 1. **Instale Java JDK**: Baixe e instale do site oficial da Oracle ou use OpenJDK. Adicione ao PATH se necessário.
@@ -14,10 +14,10 @@ Esta é uma aplicação desktop em Java usando Swing integrado com JavaFX para g
 
 ## Como Rodar a Aplicação
 1. Navegue até o diretório do projeto: `cd caminho/para/plataforma de teste`.
-2. Compile o código: `javac --module-path libs/javafx-sdk-21/lib --add-modules javafx.controls,javafx.media,javafx.swing -cp src src/PlataformaAulas.java`.
-3. Execute: `java --module-path libs/javafx-sdk-21/lib --add-modules javafx.controls,javafx.media,javafx.swing -cp src PlataformaAulas`.
+2. Compile o código: `javac --enable-preview -source 17 -classpath "lib/*;src" src/ConteudoManager.java src/PlataformaAulas.java`.
+3. Execute: `java --enable-preview -classpath "lib/*;src" PlataformaAulas`.
 
-Ou em um comando só (PowerShell): `javac --module-path libs/javafx-sdk-21/lib --add-modules javafx.controls,javafx.media,javafx.swing -cp src src/PlataformaAulas.java; if ($LASTEXITCODE -eq 0) { java --module-path libs/javafx-sdk-21/lib --add-modules javafx.controls,javafx.media,javafx.swing -cp src PlataformaAulas }`.
+Ou em um comando só (PowerShell): `javac --enable-preview -source 17 -classpath "lib/*;src" src/ConteudoManager.java src/PlataformaAulas.java; if ($LASTEXITCODE -eq 0) { java --enable-preview -classpath "lib/*;src" PlataformaAulas }`.
 
 ## Estrutura de Pastas
 - `videos/`: Contém subpastas para categorias (ex: `VideoAula/` para vídeos, `conteudo/` para PDFs).

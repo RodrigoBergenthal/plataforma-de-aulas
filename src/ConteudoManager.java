@@ -10,8 +10,8 @@ import javax.imageio.ImageIO;
 import java.util.Arrays;
 
 public class ConteudoManager {
-    private String conteudoDir = "plataforma-de-aulas-master" + File.separator + "videos";
-    private String thumbnailsDir = "plataforma-de-aulas-master" + File.separator + "thumbnails";
+    private String conteudoDir = "videos";
+    private String thumbnailsDir = "thumbnails";
 
     public ConteudoManager() {
         new File(thumbnailsDir).mkdirs();
