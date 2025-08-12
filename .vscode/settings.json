@@ -7,6 +7,9 @@
         "javafx-sdk/javafx-sdk-17.0.12/lib/javafx.graphics.jar",
         "javafx-sdk/javafx-sdk-17.0.12/lib/javafx.media.jar",
         "javafx-sdk/javafx-sdk-17.0.12/lib/javafx.swing.jar",
-        "javafx-sdk/javafx-sdk-17.0.12/lib/javafx.web.jar"
+        "javafx-sdk/javafx-sdk-17.0.12/lib/javafx.web.jar",
+        "lib/flatlaf-3.6.1.jar",
+        "lib/flatlaf-extras-3.6.1.jar",
+        "lib/jsvg-2.0.0.jar"
     ]
 }
