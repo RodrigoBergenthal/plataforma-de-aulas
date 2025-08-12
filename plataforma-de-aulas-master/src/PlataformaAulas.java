@@ -149,6 +149,10 @@ public class PlataformaAulas extends JFrame {
     private void carregarCategorias() { 
         String[] categorias = manager.carregarCategorias(); 
         listaCategorias.setListData(categorias); 
+        // Seleciona a primeira categoria se houver alguma, para carregar seus itens
+        if (listaCategorias.getModel().getSize() > 0) {
+            listaCategorias.setSelectedIndex(0);
+        }
     } 
  
     // Carregar itens da categoria selecionada 
@@ -296,6 +300,22 @@ public class PlataformaAulas extends JFrame {
                 File novaPasta = new File(manager.getVideosDir(), novoNome);
                 if (pastaAtual.renameTo(novaPasta)) {
                     carregarCategorias();
+                    // Seleciona a categoria recém-renomeada para recarregar seus itens
+                    int newIndex = -1;
+                    for (int i = 0; i < listaCategorias.getModel().getSize(); i++) {
+                        if (listaCategorias.getModel().getElementAt(i).equals(novoNome)) {
+                            newIndex = i;
+                            break;
+                        }
+                    }
+                    if (newIndex != -1) {
+                        listaCategorias.setSelectedIndex(newIndex);
+                    } else {
+                        // Se a categoria renomeada não for encontrada (improvável), selecione a primeira
+                        if (listaCategorias.getModel().getSize() > 0) {
+                            listaCategorias.setSelectedIndex(0);
+                        }
+                    }
                 } else {
                     JOptionPane.showMessageDialog(this, "Erro ao renomear categoria.");
                 }

@@ -18,8 +18,6 @@ Esta é uma aplicação desktop em Java usando Swing integrado com JavaFX para g
 2. Compile o código: `javac --module-path "javafx-sdk\javafx-sdk-17.0.12\lib" --add-modules javafx.controls,javafx.fxml,javafx.media,javafx.swing -cp ".;lib\flatlaf-3.6.1.jar;lib\flatlaf-extras-3.6.1.jar;lib\jsvg-2.0.0.jar;src" -d out src\PlataformaAulas.java`.
 3. Execute: `java --module-path "javafx-sdk\javafx-sdk-17.0.12\lib" --add-modules javafx.controls,javafx.fxml,javafx.media,javafx.swing -cp ".;lib\flatlaf-3.6.1.jar;lib\flatlaf-extras-3.6.1.jar;lib\jsvg-2.0.0.jar;out" PlataformaAulas`.
 
-Ou em um comando só (PowerShell): `javac --module-path "javafx-sdk\javafx-sdk-17.0.12\lib" --add-modules javafx.controls,javafx.fxml,javafx.media,javafx.swing -cp ".;lib\flatlaf-3.6.1.jar;lib\flatlaf-extras-3.6.1.jar;lib\jsvg-2.0.0.jar;src" -d out src\PlataformaAulas.java; if ($LASTEXITCODE -eq 0) { java --module-path "javafx-sdk\javafx-sdk-17.0.12\lib" --add-modules javafx.controls,javafx.fxml,javafx.media,javafx.swing -cp ".;lib\flatlaf-3.6.1.jar;lib\flatlaf-extras-3.6.1.jar;lib\jsvg-2.0.0.jar;out" PlataformaAulas }`.
-
 ## Estrutura de Pastas
 - `videos/`: Contém subpastas para categorias (ex: `VideoAula/` para vídeos, `conteudo/` para PDFs).
 - `thumbnails/`: Armazena thumbnails gerados para vídeos.
@@ -41,6 +39,10 @@ Ou em um comando só (PowerShell): `javac --module-path "javafx-sdk\javafx-sdk-1
 - Cores e fontes customizadas.
 - Feedback visual de loading com barra de progresso.
 - Tooltips e header com logo.
+- Correção do carregamento de itens após renomear categorias.
+- Lógica aprimorada para carregamento de itens, determinando dinamicamente o tipo de arquivo (PDF/vídeo) com base no conteúdo da pasta da categoria.
+- Geração de thumbnails exclusiva para arquivos de vídeo (MP4/AVI).
+- Carregamento automático de categorias e seus itens ao iniciar a aplicação ou após adicionar/editar uma categoria, selecionando a primeira categoria disponível.
 
 ## Configuração do GitHub
 Após clonar ou baixar, para contribuir:

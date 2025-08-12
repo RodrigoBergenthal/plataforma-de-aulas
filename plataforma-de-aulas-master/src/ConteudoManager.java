@@ -44,16 +44,28 @@ public class ConteudoManager {
         File pastaCategoria = new File(conteudoDir + "/" + categoria);
         if (pastaCategoria.exists() && pastaCategoria.isDirectory()) {
             String[] extensions;
-            if (categoria.equals("conteudo")) {
+            File[] allFiles = pastaCategoria.listFiles();
+            boolean hasPdf = false;
+            if (allFiles != null) {
+                for (File file : allFiles) {
+                    if (file.isFile() && file.getName().toLowerCase().endsWith(".pdf")) {
+                        hasPdf = true;
+                        break;
+                    }
+                }
+            }
+
+            if (hasPdf) {
                 extensions = new String[]{"pdf"};
             } else {
                 extensions = new String[]{"mp4", "avi"};
             }
-            File[] arquivos = pastaCategoria.listFiles((dir, name) -> Arrays.stream(extensions).anyMatch(ext -> name.endsWith("." + ext)));
+            File[] arquivos = pastaCategoria.listFiles((dir, name) -> Arrays.stream(extensions).anyMatch(ext -> name.toLowerCase().endsWith("." + ext)));
             if (arquivos != null) {
                 for (File f : arquivos) {
                     listaArquivos.add(f);
-                    if (!categoria.equals("conteudo")) {
+                    // Gerar thumbnail apenas para arquivos de vídeo
+                    if (f.getName().toLowerCase().endsWith(".mp4") || f.getName().toLowerCase().endsWith(".avi")) {
                         gerarThumbnail(f);
                     }
                 }
