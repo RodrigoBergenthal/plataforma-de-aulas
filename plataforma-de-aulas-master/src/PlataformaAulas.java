@@ -64,10 +64,16 @@ public class PlataformaAulas extends JFrame {
         addItem.addActionListener(e -> adicionarItem()); 
         JMenuItem removeItem = new JMenuItem("Remover Item"); 
         removeItem.addActionListener(e -> removerItem()); 
+        JMenuItem editItem = new JMenuItem("Editar Item");
+        editItem.addActionListener(e -> editarItem());
+        JMenuItem editCategoria = new JMenuItem("Editar Categoria");
+        editCategoria.addActionListener(e -> editarCategoria());
         menuGerenciar.add(addCategoria); 
         menuGerenciar.add(removeCategoria); 
+        menuGerenciar.add(editCategoria);
         menuGerenciar.add(addItem); 
         menuGerenciar.add(removeItem); 
+        menuGerenciar.add(editItem); 
         menuBar.add(menuGerenciar); 
         setJMenuBar(menuBar); 
 
@@ -76,6 +82,8 @@ public class PlataformaAulas extends JFrame {
         removeCategoria.setIcon(new FlatSVGIcon("resources/remove_icon.svg"));
         addItem.setIcon(new FlatSVGIcon("resources/add_icon.svg"));
         removeItem.setIcon(new FlatSVGIcon("resources/remove_icon.svg"));
+        editItem.setIcon(new FlatSVGIcon("resources/edit_icon.svg"));
+        editCategoria.setIcon(new FlatSVGIcon("resources/edit_icon.svg"));
 
         // Cabeçalho com logo
         JPanel headerPanel = new JPanel(new BorderLayout());
@@ -260,6 +268,41 @@ public class PlataformaAulas extends JFrame {
         } else { 
             JOptionPane.showMessageDialog(this, "Selecione um item."); 
         } 
+    }
+    
+    private void editarItem() {
+        File itemSelecionado = listaItens.getSelectedValue();
+        if (itemSelecionado != null) {
+            String novoNome = JOptionPane.showInputDialog(this, "Novo nome para o item:", itemSelecionado.getName());
+            if (novoNome != null && !novoNome.isEmpty()) {
+                File novoArquivo = new File(itemSelecionado.getParent(), novoNome);
+                if (itemSelecionado.renameTo(novoArquivo)) {
+                    carregarItensDaCategoria(listaCategorias.getSelectedValue());
+                } else {
+                    JOptionPane.showMessageDialog(this, "Erro ao renomear item.");
+                }
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Selecione um item para editar.");
+        }
+    }
+    
+    private void editarCategoria() {
+        String categoriaSelecionada = listaCategorias.getSelectedValue();
+        if (categoriaSelecionada != null) {
+            String novoNome = JOptionPane.showInputDialog(this, "Novo nome para a categoria:", categoriaSelecionada);
+            if (novoNome != null && !novoNome.isEmpty()) {
+                File pastaAtual = new File(manager.getVideosDir(), categoriaSelecionada);
+                File novaPasta = new File(manager.getVideosDir(), novoNome);
+                if (pastaAtual.renameTo(novaPasta)) {
+                    carregarCategorias();
+                } else {
+                    JOptionPane.showMessageDialog(this, "Erro ao renomear categoria.");
+                }
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Selecione uma categoria para editar.");
+        }
     } 
  
     public static void main(String[] args) { 

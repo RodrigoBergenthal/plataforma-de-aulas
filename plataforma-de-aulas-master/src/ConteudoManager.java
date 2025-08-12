@@ -124,4 +124,8 @@ public class ConteudoManager {
     public String getConteudoDir() {
         return conteudoDir;
     }
+
+    public String getVideosDir() {
+        return conteudoDir;
+    }
 }
